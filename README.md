@@ -10,6 +10,8 @@ and The Food Trust to help to provide more publicity and increase their social m
 When a pedestrian posts a photo of Blossom to Instagram and Twitter with #FeedBlossom the flower opens and changes
 lighting colors to thanks the person for "watering" it. 
 
+![](http://blossominteractive.com/img/blossom_model.png)
+
 The code posted here is to connect to social media and set up webhooks that will talk with the 3G connected sculpture.
 
 Learn more on instagram @BlossomInteractive or on twitter @BlossomInteract
