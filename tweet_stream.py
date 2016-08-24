@@ -2,9 +2,11 @@
  # Author: Jono Sanders
  # Date: Jun 18 2016
  # Description: Code to stream twitter results based on desired filters
- 	
+ # 08/24 Updated to look at tweet times
+	
 import os
 import json
+import time
 
 from twitter import Api
 
@@ -28,15 +30,12 @@ def main():
 			access_token,
 			access_token_secret)
 	
-	with open('output.txt', 'a') as f:
-		# api.GetStreamFilter will return a generator that yields one status
-		# message (i.e., Tweet) at a time as a JSON dictionary.
-		for line in api.GetStreamFilter(track=filter):
-			#json_text = "'" + json.dumps(line) + "'"
-			parsed_json = json.dumps(line)
-			print parsed_json
-			f.write("Post by " + parsed_json['name'] + ": " + parsed_json['text'] + "\n" + "Posted on " + parsed_json['created_at'])
-			f.write('\n')
+	for line in api.GetStreamFilter(track=filter):
+		try: 
+			entry = {"id": line["id"], "text": line["text"], "time": time.time()}
+		except:
+			print "unable to store tweet" #this works!
+		
 	#location = (39.985306,-75.229460, 39.913735, -75.139111) #Bounding box around Philly
 									# Doc on this at https://dev.twitter.com/streaming/overview/request-parameters
 	# if include_entities == true
