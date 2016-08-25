@@ -10,10 +10,10 @@ import time
 
 from twitter import Api
 
-consumer_key = 'na'
-consumer_secret = 'na'
-access_token = 'na'
-access_token_secret = 'na'
+consumer_key = 'gbaambMUJadDoqEGTa03Z8urI'
+consumer_secret = 'iWpdNvYhgKRZIPgy3TRlMZ2OH8vz28N2B9keWxULw4i9o6ZAp4'
+access_token = '732740396430839809-2aibPYIhLRgLbSWinemwTbrDpskEiwe'
+access_token_secret = 'gJJS8ovoACCHzAfe05QP4E0qqORI8zru5uxmzVanIGxCs'
 #From blossominteract account
 
 
@@ -29,19 +29,16 @@ def main():
 			consumer_secret,
 			access_token,
 			access_token_secret)
+	tweets = []
 	
 	for line in api.GetStreamFilter(track=filter):
-		try: 
-			entry = {"id": line["id"], "text": line["text"], "time": time.time()}
+		try:
+			entry = {"screen_name": line["screen_name"], "text": line["text"], "time": time.time()}
+			tweets.append(entry)
+			json.dump(tweets, open("test.json", "w"))   
 		except:
 			print "unable to store tweet" #this works!
-		
-	#location = (39.985306,-75.229460, 39.913735, -75.139111) #Bounding box around Philly
-									# Doc on this at https://dev.twitter.com/streaming/overview/request-parameters
-	# if include_entities == true
-	# has filter:links
-	
-	
+
 if __name__ == '__main__':
     main()
 	
