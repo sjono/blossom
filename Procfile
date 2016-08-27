@@ -1,1 +1,1 @@
-python tweet_stream.py
+web: sh heroku.sh

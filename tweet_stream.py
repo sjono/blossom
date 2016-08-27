@@ -40,7 +40,7 @@ def main():
 			tweets.append(entry)
 			json.dump(tweets, open("test.json", "w"))   
 		except:
-			print "unable to store tweet" #this works!
+			print("unable to store tweet") #this works!
 
 if __name__ == '__main__':
     main()
