@@ -37,8 +37,7 @@ def main():
 			entry = {"screen_name": line["entities"]["user_mentions"][0]["screen_name"], "text": line["text"], "time": time.time()}
 			tweets.append(entry)
 			json.dump(tweets, open("test.json", "w"))  
-			tweets.append(entry)
-			json.dump(tweets, open("test.json", "w"))   
+			print("one tweet stored")
 		except:
 			print("unable to store tweet") #this works!
 
