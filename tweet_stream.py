@@ -1,8 +1,9 @@
- # Name: tweet_stream.py
+ # Name: tweet_stream.py (GITHUB VERSION!)
  # Author: Jono Sanders
  # Date: Jun 18 2016
  # Description: Code to stream twitter results based on desired filters
- # 08/24 Updated to look at tweet times
+ # 08/24 Updated to look at tweet times, this version is in GITHUB
+ # 08/27 Fixed screen_name part
 	
 import os
 import json
@@ -23,7 +24,7 @@ def main():
 	# data returned will be for any tweet mentioning:
 	# @twitter *OR* @twitterapi *OR* @support.
 	# filter = ['hunger', 'filter:images']
-	filter = ['#hunger']
+	filter = ['#freedom']
 	# Assumption - this excludes retweets?
 	api = Api(consumer_key,
 			consumer_secret,
@@ -33,7 +34,9 @@ def main():
 	
 	for line in api.GetStreamFilter(track=filter):
 		try:
-			entry = {"screen_name": line["screen_name"], "text": line["text"], "time": time.time()}
+			entry = {"screen_name": line["entities"]["user_mentions"][0]["screen_name"], "text": line["text"], "time": time.time()}
+			tweets.append(entry)
+			json.dump(tweets, open("test.json", "w"))  
 			tweets.append(entry)
 			json.dump(tweets, open("test.json", "w"))   
 		except:

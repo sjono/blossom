@@ -1,3 +1,9 @@
+# Name: blossom_server.py (GITHUB VERSION!)
+ # Author: Jono Sanders
+ # Date: Aug 24 2016
+ # Description: Code to count twitter posts
+
+
 from flask import Flask
 app = Flask(__name__)
 

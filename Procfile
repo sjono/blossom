@@ -1,1 +1,1 @@
-web: gunicorn blossom_server:app
+web: sh heroku.sh
