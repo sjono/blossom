@@ -1,7 +1,6 @@
 from flask import Flask
 app = Flask(__name__)
 
-from twitter import Api
 import os
 import json
 tweet_ct = 0
