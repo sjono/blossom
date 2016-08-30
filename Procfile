@@ -1,1 +1,1 @@
-web: gunicorn blossom_server:app
+web: python blossom_server.py
