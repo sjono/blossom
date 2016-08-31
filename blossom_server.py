@@ -22,7 +22,7 @@ def counter():
 			data = json.load(data_file)
 		except:
 			data = 0
-			print "Empty JSON file"
+			print("Empty JSON file")
 	if (data != 0):
 		tweet_ct = len(data)
 	return "Tweet count is: " + str(tweet_ct)
