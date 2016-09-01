@@ -2,14 +2,14 @@
  # Author: Jono Sanders
  # Date: Jun 18 2016
  # Description: Code to stream twitter results based on desired filters
- # 08/24 Updated to look at tweet times, this version is in GITHUB
- # 08/27 Fixed screen_name part
+ # 09/01 Updated to post to mongodb
 	
-import os
 import json
 import time
+import pymongo
 
 from twitter import Api
+
 
 consumer_key = 'gbaambMUJadDoqEGTa03Z8urI'
 consumer_secret = 'iWpdNvYhgKRZIPgy3TRlMZ2OH8vz28N2B9keWxULw4i9o6ZAp4'
@@ -30,16 +30,23 @@ def main():
 			consumer_secret,
 			access_token,
 			access_token_secret)
-	tweets = []
+	#client = pymongo.MongoClient('mongodb://localhost:27017/') 	#Locally hoste! Add server info here!
+	client = pymongo.MongoClient('mongodb://blossominteractive:plant2bear@ds019846.mlab.com:19846/blossom_test')
+	
+	db = client['blossom_test'] # CHANGE THIS TO CORRECT Database!!
+	
+	collection = db['watering']
 	
 	for line in api.GetStreamFilter(track=filter):
 		try:
-			entry = {"screen_name": line["entities"]["user_mentions"][0]["screen_name"], "text": line["text"], "time": time.time()}
-			tweets.append(entry)
-			json.dump(tweets, open("test.json", "w"))  
-			print("one tweet stored")
+			entry = {"screen_name": line["entities"]["user_mentions"][0]["screen_name"], "text": line["text"], "time": time.time(), "type":"tweet"}
+			try:
+				collection.insert_one(entry)
+				print("one tweet stored")
+			except:
+				print("Could not store tweet to db")
 		except:
-			print("unable to store tweet") #this works!
+			print("Info not pulled from tweet") #this works!
 
 if __name__ == '__main__':
     main()
