@@ -21,16 +21,15 @@ def counter():
 	db = client['blossom_test'] # CHANGE THIS TO CORRECT Database!!
 	collection = db['watering']
 	
-	tweets = 0
-	#with tweets exported to json like this >>
-	#json.dump(tweets, open("test.json", "w"))
-	with open("test.json") as data_file:
-		try: 
-			for post in collection.find({"type": "tweet"}):
-				tweets +=1
-		except:
-			tweets = 0
-			print("Empty database")
-	return "Tweet count is: " + str(tweets)
+	
+	try: 
+		tweets = collection.find({"type": "tweet"}).count()
+	except tweets = 0
+	try:
+		instagram = collection.find({"type": "instagram"}).count()
+	except instagram = 0
+		print("Empty database")
+
+	return "Tweet count is: " + str(tweets) + "\n Instagram count is: " + str(instagram)
 if __name__ == "__main__":
 	app.run()
