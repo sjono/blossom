@@ -1,2 +1,1 @@
-web: gunicorn blossom_server:app
-worker: python tweet_stream.py
+web: gunicorn blossom_threads:app
