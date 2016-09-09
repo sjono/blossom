@@ -27,7 +27,7 @@ def instagram_loop():
 	
 	url = 'https://api.instagram.com/v1/tags/wilderness/media/recent?access_token=231661582.54da896.18a9f4094b854f879d3385931910b9b4'
 	while True:
-		print 'instagram event!'
+		print ('instagram event!')
 		res = requests.get(url)
 		body = res.json()
 		# Get desired parameters from each instagram post in the json
@@ -72,7 +72,7 @@ def twitter_loop():
 #	access_token = os.getenv('TWITTER_ACCESS_TOKEN')
 #	access_token_secret = os.getenv('TWITTER_ACCESS_SECRET')
 	while True:
-		print 'twitter event!'
+		print ('twitter event!')
 		filter = ['#freedom']
 		api = Api(consumer_key,
 				consumer_secret,
