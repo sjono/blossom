@@ -62,15 +62,11 @@ def instagram_loop():
 		time.sleep(30) # wait 30 seconds
 
 def twitter_loop():
-	consumer_key = 'gbaambMUJadDoqEGTa03Z8urI'
-	consumer_secret = 'iWpdNvYhgKRZIPgy3TRlMZ2OH8vz28N2B9keWxULw4i9o6ZAp4'
-	access_token = '732740396430839809-2aibPYIhLRgLbSWinemwTbrDpskEiwe'
-	access_token_secret = 'gJJS8ovoACCHzAfe05QP4E0qqORI8zru5uxmzVanIGxCs'
 	#FOR HEROKU
-#	consumer_key = os.getenv('TWITTER_CONSUMER_KEY')
-#	consumer_secret = os.getenv('TWITTER_CONSUMER_SECRET')
-#	access_token = os.getenv('TWITTER_ACCESS_TOKEN')
-#	access_token_secret = os.getenv('TWITTER_ACCESS_SECRET')
+	consumer_key = os.getenv('TWITTER_CONSUMER_KEY')
+	consumer_secret = os.getenv('TWITTER_CONSUMER_SECRET')
+	access_token = os.getenv('TWITTER_ACCESS_TOKEN')
+	access_token_secret = os.getenv('TWITTER_ACCESS_SECRET')
 	while True:
 		print ('twitter event!')
 		filter = ['#freedom']
@@ -113,7 +109,7 @@ def client():
 	try:
 		instagram = collection.find({"type": "instagram"}).count()
 	except: instagram = 0
-	return "Tweet count is: " + str(tweets) + "\n Instagram count is: " + str(instagram)
+	return str(tweets+instagram) + " is TOTAL, Tweet count is: " + str(tweets) + "\n Instagram count is: " + str(instagram)
 if __name__ == "__main__":
 	app.run()
 
