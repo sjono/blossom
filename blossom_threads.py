@@ -2,6 +2,7 @@
  # Author: Jono Sanders
  # Date: Sep 09 2016
  # Description: Code to run tweet stream, instagram search and server
+ # 09/17 Updated to search for #FeedBlossom
 
 
 from multiprocessing.pool import ThreadPool
@@ -25,7 +26,7 @@ def instagram_loop():
 	db = client['blossom_test']
 	collection = db['watering']
 	
-	url = 'https://api.instagram.com/v1/tags/wilderness/media/recent?access_token=231661582.54da896.18a9f4094b854f879d3385931910b9b4'
+	url = 'https://api.instagram.com/v1/tags/feedblossom/media/recent?access_token=231661582.54da896.18a9f4094b854f879d3385931910b9b4'
 	while True:
 		print ('instagram event!')
 		res = requests.get(url)
@@ -69,7 +70,7 @@ def twitter_loop():
 	access_token_secret = os.getenv('TWITTER_ACCESS_SECRET')
 	while True:
 		print ('twitter event!')
-		filter = ['#freedom']
+		filter = ['#freedom', 'filter:images']
 		api = Api(consumer_key,
 				consumer_secret,
 				access_token,
