@@ -70,7 +70,7 @@ def twitter_loop():
 	access_token_secret = os.getenv('TWITTER_ACCESS_SECRET')
 	while True:
 		print ('twitter event!')
-		filter = ['#freedom filter:images']
+		filter = ['#FeedBlossom filter:media']
 		api = Api(consumer_key,
 				consumer_secret,
 				access_token,
