@@ -67,7 +67,7 @@ def instagram_loop():
 		time.sleep(20) # wait 30 seconds
 
 def text_send():
-	int twilio_ct = 0
+	twilio_ct = 0
 	account = "ACf7902a47050a7fdc9a5d96915dcb0f19"
 	token = "5a4a726216f7a908d37258bd57069469"
 	twilio = TwilioRestClient(account, token)
@@ -97,7 +97,7 @@ def text_send():
 			#sent twilio sms
 			message = twilio.messages.create(to="+15038476273", from_="+12672140103", body=str(waters))
 		temp = waters
-		twilio_ct++;
+		twilio_ct+=1
 		if (twilio_ct > 9):
 			print("twilio checked 10 times, waiting another 5 sec") #remove this line!
 			twilio_ct = 0
