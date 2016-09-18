@@ -3,6 +3,7 @@
  # Date: Sep 09 2016
  # Description: Code to run tweet stream, instagram search and server
  # 09/17 Updated to search for #FeedBlossom
+ # 09/18 Jono updated to run tweet_stream in a separate dyno
 
 
 from multiprocessing.pool import ThreadPool
@@ -62,41 +63,6 @@ def instagram_loop():
 		print("waiting 30 sec")
 		time.sleep(30) # wait 30 seconds
 
-def twitter_loop():
-	#FOR HEROKU
-	consumer_key = os.getenv('TWITTER_CONSUMER_KEY')
-	consumer_secret = os.getenv('TWITTER_CONSUMER_SECRET')
-	access_token = os.getenv('TWITTER_ACCESS_TOKEN')
-	access_token_secret = os.getenv('TWITTER_ACCESS_SECRET')
-	while True:
-		print ('twitter event!')
-		filter = ['#feedblossom']
-		api = Api(consumer_key,
-				consumer_secret,
-				access_token,
-				access_token_secret)
-		client = pymongo.MongoClient('mongodb://blossominteractive:plant2bear@ds019846.mlab.com:19846/blossom_test')
-
-		db = client['blossom_test'] # CHANGE THIS TO CORRECT Database!!
-
-		collection = db['watering']
-
-		for line in api.GetStreamFilter(track=filter):
-			try: #Store tweet data and check for most recent tweet
-				entry = {"screen_name": line["user"]["screen_name"], "text":  line["text"], "time": time.time(), "type":"tweet"}
-
-				tweets = list(collection.find({"screen_name": entry.get("screen_name")}).sort('time', pymongo.DESCENDING))
-
-				if len(tweets) >= 1 and (tweets[0].get("time")-time.time()) < 86400: # 24 hrs is 86,400 sec
-					print("Someone tweeted >1 in 24 hrs")
-				else:
-					try:
-						collection.insert_one(entry)
-						print("one tweet stored")
-					except:	
-						print("Could not store tweet to db")
-			except Exception as e:
-				print("Info could not be pulled from tweet: {}".format(e))
 
 @app.route('/')
 def client():

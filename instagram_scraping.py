@@ -35,7 +35,7 @@ while (1):
 		  'instagram_id': item['id'],
 		  'type': 'instagram',
 		} 
-		# check if the ID already inpu
+		# check if the ID already input
 		instas = list(collection.find({"screen_name": entry.get("screen_name")}).sort('time', pymongo.DESCENDING))
 		user_posted_before = (len(instas) >= 1)
 		if (user_posted_before is True):
