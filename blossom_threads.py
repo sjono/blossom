@@ -81,4 +81,3 @@ if __name__ == "__main__":
 	app.run()
 
 pool.apply_async(instagram_loop)
-pool.apply_async(twitter_loop)
