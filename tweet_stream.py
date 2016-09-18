@@ -13,11 +13,16 @@ from twitter import Api
 
 
 
-#Use below for heroku deployment
-consumer_key = os.getenv('TWITTER_CONSUMER_KEY')
-consumer_secret = os.getenv('TWITTER_CONSUMER_SECRET')
-access_token = os.getenv('TWITTER_ACCESS_TOKEN')
-access_token_secret = os.getenv('TWITTER_ACCESS_SECRET')
+##Use below for heroku deployment
+#consumer_key = os.getenv('TWITTER_CONSUMER_KEY')
+#consumer_secret = os.getenv('TWITTER_CONSUMER_SECRET')
+#access_token = os.getenv('TWITTER_ACCESS_TOKEN')
+#access_token_secret = os.getenv('TWITTER_ACCESS_SECRET')
+
+consumer_key = 'gbaambMUJadDoqEGTa03Z8urI'
+consumer_secret = 'iWpdNvYhgKRZIPgy3TRlMZ2OH8vz28N2B9keWxULw4i9o6ZAp4'
+access_token = '732740396430839809-2aibPYIhLRgLbSWinemwTbrDpskEiwe'
+access_token_secret = 'gJJS8ovoACCHzAfe05QP4E0qqORI8zru5uxmzVanIGxCs'
 
 
 def main():
@@ -26,7 +31,7 @@ def main():
 	# data returned will be for any tweet mentioning:
 	# @twitter *OR* @twitterapi *OR* @support.
 	# filter = ['hunger', 'filter:images']
-	filter = ['#freedom']
+	filter = ['#feedblossom']
 	# Assumption - this excludes retweets?
 	api = Api(consumer_key,
 			consumer_secret,
