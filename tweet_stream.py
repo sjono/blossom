@@ -64,7 +64,7 @@ def main():
 				except Exception as e:
 					print("Info could not be pulled from tweet: {}".format(e)) #this works!
 		except:
-			print "Twitter connection interrupted, reconnecting in 20 sec"
+			print ("Twitter connection interrupted, reconnecting in 20 sec")
 			time.sleep(20) # Pause 20 seconds
 	#END WHILE LOOP
 

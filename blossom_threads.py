@@ -36,7 +36,7 @@ def instagram_loop():
 			res = requests.get(url)
 			body = res.json()
 			print ('instagram event!')
-		else:
+		except:
 			print("instagram get failed")
 		# Get desired parameters from each instagram post in the json
 		for item in body['data']:
