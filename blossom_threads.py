@@ -100,10 +100,11 @@ def text_send():
 		if (waters > temp):
 			#sent twilio sms
 			message = twilio.messages.create(to="+15038476273", from_="+12672140103", body=str(waters))
+			print("Twilio send a message to Blossom - count is" + str(waters))
 		temp = waters
 		twilio_ct+=1
-		if (twilio_ct > 9):
-			print("twilio checked 10 times, waiting another 5 sec") #remove this line!
+		if (twilio_ct > 50):
+			print("twilio checked 50 times (~4 min), waiting another 5 sec") #remove this line!
 			twilio_ct = 0
 		time.sleep(5)
 		
