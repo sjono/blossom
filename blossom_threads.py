@@ -56,10 +56,11 @@ def instagram_loop():
 			user_posted_before = (len(instas) >= 1)
 			if (user_posted_before is True):
 				posted_recently = time.time()-instas[0].get("time") < 86400
-			have_seen_before = collection.find({"instagram_id": entry}).count() > 0
-			if (user_posted_before and posted_recently) or have_seen_before:
+			else posted_recently = False
+			have_seen_before = collection.find({"instagram_id": entry.get("instagram_id")}).count() > 0
+			if posted_recently or have_seen_before:
 				pass
-				print("insta post already counted")
+				#print("insta post already counted")
 			else:
 				try:
 					collection.insert_one(entry)
