@@ -44,23 +44,29 @@ def main():
 	
 	collection = db['watering']
 	print("opening twitter connection")
-	for line in api.GetStreamFilter(track=filter):
-		
-		try: #Store tweet data and check for most recent tweet
-			entry = {"screen_name": line["user"]["screen_name"], "text":  line["text"], "time": time.time(), "type":"tweet"}
-			
-			tweets = list(collection.find({"screen_name": entry.get("screen_name")}).sort('time', pymongo.DESCENDING))
-			
-			if len(tweets) >= 1 and (tweets[0].get("time")-time.time()) < 86400: # 24 hrs is 86,400 sec
-				print("Someone tweeted >1 in 24 hrs")
-			else:
-				try:
-					collection.insert_one(entry)
-					print("one tweet stored")
-				except:	
-					print("Could not store tweet to db")
-		except Exception as e:
-			print("Info could not be pulled from tweet: {}".format(e)) #this works!
+	while True:
+		try:
+			for line in api.GetStreamFilter(track=filter):
+
+				try: #Store tweet data and check for most recent tweet
+					entry = {"screen_name": line["user"]["screen_name"], "text":  line["text"], "time": time.time(), "type":"tweet"}
+
+					tweets = list(collection.find({"screen_name": entry.get("screen_name")}).sort('time', pymongo.DESCENDING))
+
+					if len(tweets) >= 1 and (time.time() - tweets[0].get("time")) < 86400: # 24 hrs is 86,400 sec
+						print("Someone tweeted >1 in 24 hrs, time: " + str(time.time() - tweets[0].get("time")))
+					else:
+						try:
+							collection.insert_one(entry)
+							print("one tweet stored")
+						except:	
+							print("Could not store tweet to db")
+				except Exception as e:
+					print("Info could not be pulled from tweet: {}".format(e)) #this works!
+		except:
+			print "Twitter connection interrupted, reconnecting in 20 sec"
+			time.sleep(20) # Pause 20 seconds
+	#END WHILE LOOP
 
 if __name__ == '__main__':
     main()

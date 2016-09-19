@@ -5,7 +5,7 @@
  # 09/17 Updated to search for #FeedBlossom
  # 09/18 Jono updated to run tweet_stream in a separate dyno
  # 09/18 Run based on twilio texts
-
+ # 09/19 Added try for instagram connection
 
 from multiprocessing.pool import ThreadPool
 import time
@@ -32,9 +32,12 @@ def instagram_loop():
 	
 	url = 'https://api.instagram.com/v1/tags/feedblossom/media/recent?access_token=231661582.54da896.18a9f4094b854f879d3385931910b9b4'
 	while True:
-		print ('instagram event!')
-		res = requests.get(url)
-		body = res.json()
+		try: 
+			res = requests.get(url)
+			body = res.json()
+			print ('instagram event!')
+		else:
+			print("instagram get failed")
 		# Get desired parameters from each instagram post in the json
 		for item in body['data']:
 			if item['caption'] is None:
@@ -56,7 +59,7 @@ def instagram_loop():
 			have_seen_before = collection.find({"instagram_id": entry}).count() > 0
 			if (user_posted_before and posted_recently) or have_seen_before:
 				pass
-				#print("insta post already counted")
+				print("insta post already counted")
 			else:
 				try:
 					collection.insert_one(entry)
