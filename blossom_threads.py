@@ -55,7 +55,7 @@ def instagram_loop():
 			instas = list(collection.find({"screen_name": entry.get("screen_name")}).sort('time', pymongo.DESCENDING))
 			user_posted_before = (len(instas) >= 1)
 			if (user_posted_before is True):
-				posted_recently = instas[0].get("time")-time.time() < 86400
+				posted_recently = time.time()-instas[0].get("time") < 86400
 			have_seen_before = collection.find({"instagram_id": entry}).count() > 0
 			if (user_posted_before and posted_recently) or have_seen_before:
 				pass
