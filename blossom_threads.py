@@ -56,7 +56,7 @@ def instagram_loop():
 			user_posted_before = (len(instas) >= 1)
 			if (user_posted_before is True):
 				posted_recently = time.time()-instas[0].get("time") < 86400
-			else posted_recently = False
+			else: posted_recently = False
 			have_seen_before = collection.find({"instagram_id": entry.get("instagram_id")}).count() > 0
 			if posted_recently or have_seen_before:
 				pass
