@@ -6,6 +6,7 @@
  # 09/18 Jono updated to run tweet_stream in a separate dyno
  # 09/18 Run based on twilio texts
  # 09/19 Added try for instagram connection
+ # 09/22 Changed it to be 3 posts for a full opening
 
 from multiprocessing.pool import ThreadPool
 import time
@@ -99,7 +100,7 @@ def text_send():
 		waters = instagram + tweets
 		if (waters > temp):
 			#sent twilio sms
-			message = twilio.messages.create(to="+15038476273", from_="+12672140103", body=str(waters))
+			message = twilio.messages.create(to="+15038476273", from_="+12672140103", body=str(waters*7))
 			print("Twilio send a message to Blossom - count is" + str(waters))
 		temp = waters
 		twilio_ct+=1
