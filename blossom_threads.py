@@ -88,7 +88,7 @@ def text_send():
 	except: instagram = 0
 	waters = instagram + tweets
 	temp = waters
-	message = twilio.messages.create(to="+15038476273", from_="+12672140103", body=str(waters)) #Initialize for blossom
+	message = twilio.messages.create(to="+15037093298", from_="+12672140103", body=str(waters)) #Initialize for blossom
 	print("initial counts taken and texted")
 	while(True):
 		try: 
