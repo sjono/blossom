@@ -1,5 +1,5 @@
-# blossom
-Blossom Interactive - a kinetic sculpture to raise awareness about hunger issues in Philadelphia
+# Blossom Interactive
+a kinetic sculpture to raise awareness about hunger issues in Philadelphia
 
 This sculpture is a 6 ft tall blossom which will be installed on Penn's campus in fall 2016. 
 The blossom will feature a plaque with information about local hunger issues.
@@ -10,9 +10,9 @@ and The Food Trust to help to provide more publicity and increase their social m
 When a pedestrian posts a photo of Blossom to Instagram and Twitter with #FeedBlossom the flower opens and changes
 lighting colors to thanks the person for "watering" it. 
 
-![](http://blossominteractive.com/img/blossom_model.png)
+![](https://github.com/sjono/blossom/raw/master/img/1214_blossom_installed.png)
 
 The code posted here is to connect to social media and set up webhooks that will talk with the 3G connected sculpture.
 
-Learn more on instagram @BlossomInteractive or on twitter @BlossomInteract
+Learn more on <a href="https://www.instagram.com/blossominteractive/">instagram @BlossomInteractive</a> or on <a href="https://twitter.com/blossominteract">twitter @BlossomInteract</a>
 www.blossominteractive.com
