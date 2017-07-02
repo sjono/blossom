@@ -14,5 +14,4 @@ lighting colors to thanks the person for "watering" it.
 
 The code posted here is to connect to social media and set up webhooks that will talk with the 3G connected sculpture.
 
-Learn more on <a href="https://www.instagram.com/blossominteractive/">instagram @BlossomInteractive</a> or on <a href="https://twitter.com/blossominteract">twitter @BlossomInteract</a>
-www.blossominteractive.com
+Learn more on <a href="https://www.instagram.com/blossominteractive/">instagram </a>, on <a href="https://twitter.com/blossominteract">twitter</a> or at www.blossominteractive.com
