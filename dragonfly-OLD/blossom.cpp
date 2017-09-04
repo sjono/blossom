@@ -301,69 +301,99 @@ int StringParse(string input)
     }
 
 
-    void ledChaseTail (unsigned char r, unsigned char g, unsigned char b, unsigned int wait, int tail){
-      int pixelNum = 0;
-      int tail_curr = 0;
-      int tail_comp = tail + 1;
-      __disable_irq();    // Disable Interrupts
-      for (int c = 0; c < (PIXELS+tail); c++){
-        if (pixelNum < PIXELS+1){
-            for (int i = 0; i < (pixelNum-tail_curr); i++){
-                sendPixel(0,0,0);
-            }
-            for (int i = 0; i < tail_curr; i++){
-                sendPixel((r*(i+1)/(tail_comp)), (g*(i+1)/(tail_comp)), (b*(i+1)/(tail_comp)));
-            }
-            sendPixel(r,g,b);
-            for (int i = pixelNum; i < PIXELS; i++){
-                sendPixel(0,0,0);
-            }
-            show();
-            pixelNum++;
-            if (tail_curr < tail){
-                tail_curr++;
-            }
-        }
-        else {
-            for (int i = 0; i < (pixelNum-tail_curr); i++){
-                sendPixel(0,0,0);
-            }
-            for (int i = 0; i < tail_curr; i++){
-                sendPixel((r*(i+1)/(tail_comp)), (g*(i+1)/(tail_comp)), (b*(i+1)/(tail_comp)));
-            }
-            show();
-            //pixelNum++;
-            tail_curr--;
-        }
-        wait_ms(wait);
+void ledChaseTail (unsigned char r, unsigned char g, unsigned char b, unsigned int wait, int tail){
+    int pixelNum = 0;
+    int tail_curr = 0;
+    int tail_comp = tail + 1;
+    __disable_irq();    // Disable Interrupts
+    for (int c = 0; c < (PIXELS+tail); c++){
+      if (pixelNum < PIXELS+1){
+          for (int i = 0; i < (pixelNum-tail_curr); i++){
+              sendPixel(0,0,0);
+          }
+          for (int i = 0; i < tail_curr; i++){
+              sendPixel((r*(i+1)/(tail_comp)), (g*(i+1)/(tail_comp)), (b*(i+1)/(tail_comp)));
+          }
+          sendPixel(r,g,b);
+          for (int i = pixelNum; i < PIXELS; i++){
+              sendPixel(0,0,0);
+          }
+          show();
+          pixelNum++;
+          if (tail_curr < tail){
+              tail_curr++;
+          }
       }
-      __enable_irq();     // Enable Interrupts
+      else {
+          for (int i = 0; i < (pixelNum-tail_curr); i++){
+              sendPixel(0,0,0);
+          }
+          for (int i = 0; i < tail_curr; i++){
+              sendPixel((r*(i+1)/(tail_comp)), (g*(i+1)/(tail_comp)), (b*(i+1)/(tail_comp)));
+          }
+          show();
+          //pixelNum++;
+          tail_curr--;
+      }
+      wait_ms(wait);
     }
+    __enable_irq();     // Enable Interrupts
+}
 
-    void ledBreathLinear(unsigned char r, unsigned char g, unsigned char b, unsigned int wait, int mult){
-        char r_int = r/mult;
-        char g_int = g/mult;
-        char b_int = b/mult;
-        __disable_irq();    // Disable Interrupts
-        for(int i = 0; i<mult; i++){
-            char r_curr = i * r_int;
-            char g_curr = i * g_int;
-            char b_curr = i * b_int;
-            for( int p=0; p<PIXELS; p++ ) {
-                sendPixel( r_curr , g_curr , b_curr );
-            }
-            show();
-            wait_ms(wait);
+void ledBreathLinear(unsigned char r, unsigned char g, unsigned char b, unsigned int wait, int mult){
+    char r_int = r/mult;
+    char g_int = g/mult;
+    char b_int = b/mult;
+    __disable_irq();    // Disable Interrupts
+    for(int i = 0; i<mult; i++){
+        char r_curr = i * r_int;
+        char g_curr = i * g_int;
+        char b_curr = i * b_int;
+        for( int p=0; p<PIXELS; p++ ) {
+            sendPixel( r_curr , g_curr , b_curr );
         }
-        for(int i = mult; i>0; i--){
-            char r_curr = i * r_int;
-            char g_curr = i * g_int;
-            char b_curr = i * b_int;
-            for( int p=0; p<PIXELS; p++ ) {
-                sendPixel( r_curr , g_curr , b_curr );
-            }
-            show();
-            wait_ms(wait);
-        }
-        __enable_irq();     // Enable Interrupts
+        show();
+        wait_ms(wait);
     }
+    for(int i = mult; i>0; i--){
+        char r_curr = i * r_int;
+        char g_curr = i * g_int;
+        char b_curr = i * b_int;
+        for( int p=0; p<PIXELS; p++ ) {
+            sendPixel( r_curr , g_curr , b_curr );
+        }
+        show();
+        wait_ms(wait);
+    }
+    __enable_irq();     // Enable Interrupts
+}
+
+void ledDetonate(unsigned char r, unsigned char g, unsigned char b, unsigned int wait, unsigned int interval, int mult, int flashes){
+    for (int i = flashes; i > 0; i--){
+        showColor(r,g,b);
+        wait_ms(interval);
+        //ledBreathLinear(r,g,b,(wait/i),mult);
+        showColor(0,0,0);
+        wait_ms(interval*i);
+    }
+    for (int i = flashes; i >= 0; i--){
+        showColor(r,g,b);
+        wait_ms(interval);
+        showColor(0,0,0);
+        wait_ms(interval);
+    }
+    int r_bright = r*2;
+    if (r_bright >= 255){
+        r_bright = 255;
+    }
+    int g_bright = g*2;
+    if (g_bright >= 255){
+        g_bright = 255;
+    }
+    int b_bright = b*2;
+    if (b_bright >= 255){
+        b_bright = 255;
+    }
+    wait_ms(5000);
+    showColor(150,150,150);
+}
