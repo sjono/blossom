@@ -73,7 +73,8 @@ void loop() {
     delay(1000);
     //rainbow(20);
 
-    ledChaseTail(r,g,b,50,6);
+    //ledChaseTail(r,g,b,50,6);
+    ledBreathLinear(0,120,0,100,6);
 
     // code from Blossom2016
 
@@ -99,7 +100,7 @@ void loop() {
         if (r < 172)
             r += change;
         else r = 180;
-        ledChaseTail(r,g,b,50,6);
+        ledChaseTail(r,g,b,100,6);
         Serial.println("Timer is " + String(counter*100) + ", water is " + String(water)); //debug
         Serial.println("Opening: Counter is at" + String(open_ct) + ", Water count is at " +String(water) + " R is " +r+ ", G is " + String(g));
         digitalWrite(MOTOR_DIR, HIGH);  // Set motor DIR to open
@@ -220,68 +221,63 @@ void ledChaseTail (unsigned char r, unsigned char g, unsigned char b, unsigned i
      int tail_curr = 0;
      int tail_comp = tail + 1;
      __disable_irq();    // Disable Interrupts
-     for (int j = 0; j < PIXEL_COUNT; j++) // walks thru the whole string
+     for (int j = 0; j < strip.numPixels(); j++) // walks thru the whole string
      {
+       delay(wait); // milliseconds
         // First, update the color on the next pixel
+        Serial.println("Update next pixel");
         strip.setPixelColor(j, r, g, b);
+        strip.show();
         // Then update the tail section to remove the Color
         if((j-tail)>0){
+          Serial.println("Remove tail pixel");
           strip.setPixelColor((j-tail), 0, 0, 0);
+          strip.show();
         }
-        delay(wait); // milliseconds
+
      }
-     for (int j = (PIXEL_COUNT-tail); j < PIXEL_COUNT; j++) // remove the ending tail colors
+    for (int j = 0; j < (strip.numPixels()-tail); j++) // remove the ending tail colors
      {
-         strip.setPixelColor((j-tail), 0, 0, 0);
+         strip.setPixelColor((j+tail), 0, 0, 0);
+         strip.show();
          delay(wait); // milliseconds
      }
    }
 
+   void ledBreathLinear(unsigned char r, unsigned char g, unsigned char b, unsigned int wait, int mult){
+       char r_int = r/mult;
+       char g_int = g/mult;
+       char b_int = b/mult;
+       __disable_irq();    // Disable Interrupts
+       for(int i = 0; i<mult; i++){ // Light up
+           char r_curr = i * r_int;
+           char g_curr = i * g_int;
+           char b_curr = i * b_int;
+           for( int p=0; p<strip.numPixels(); p++ ) {
+               strip.setPixelColor(p, r_curr , g_curr , b_curr );
+           }
+           strip.show();
+           delay(wait); // milliseconds
+       }
+       delay(wait*20);
+       for(int i = mult; i>0; i--){ // Light down
+           char r_curr = i * r_int;
+           char g_curr = i * g_int;
+           char b_curr = i * b_int;
+           for( int p=0; p<strip.numPixels(); p++ ) {
+               strip.setPixelColor(p, r_curr , g_curr , b_curr );
+           }
+           strip.show();
+           delay(wait); // milliseconds
+       }
+       for( int p=0; p<strip.numPixels(); p++ ) { // Turn all lights completely off
+               strip.setPixelColor(p, 0 , 0 , 0 );
+           }
+           strip.show();
+           delay(wait); // milliseconds
+       __enable_irq();     // Enable Interrupts
+   }
 
-// Original function from Phil
-// void ledChaseTail (unsigned char r, unsigned char g, unsigned char b, unsigned int wait, int tail){
-//      int pixelNum = 0;
-//      int tail_curr = 0;
-//      int tail_comp = tail + 1;
-//      __disable_irq();    // Disable Interrupts
-//      for (int c = 0; c < (PIXEL_COUNT+tail); c++){
-//        if (pixelNum < PIXEL_COUNT+1){
-//            for (int i = 0; i < (pixelNum-tail_curr); i++){
-//                 strip.setPixelColor(pixelNum, r, g, b);
-//                //sendPixel(0,0,0);
-//            }
-//            for (int i = 0; i < tail_curr; i++){
-//                strip.setPixelColor(pixelNum, (r*(i+1)/(tail_comp)), (g*(i+1)/(tail_comp)), (b*(i+1)/(tail_comp)));
-//                //sendPixel((r*(i+1)/(tail_comp)), (g*(i+1)/(tail_comp)), (b*(i+1)/(tail_comp)));
-//            }
-//            strip.setPixelColor(pixelNum, r, g, b);
-//            //sendPixel(r,g,b);
-//            for (int i = pixelNum; i < PIXEL_COUNT; i++){
-//                strip.setPixelColor(pixelNum, 0, 0, 0);
-//                //sendPixel(0,0,0);
-//            }
-//            strip.show();
-//            pixelNum++;
-//            if (tail_curr < tail){
-//                tail_curr++;
-//            }
-//        }
-//        else {
-//            for (int i = 0; i < (pixelNum-tail_curr); i++){
-//                strip.setPixelColor(pixelNum, 0, 0, 0);
-//               //  sendPixel(0,0,0);
-//            }
-//            for (int i = 0; i < tail_curr; i++){
-//                strip.setPixelColor(pixelNum, (r*(i+1)/(tail_comp)), (g*(i+1)/(tail_comp)), (b*(i+1)/(tail_comp)));
-//               //  sendPixel((r*(i+1)/(tail_comp)), (g*(i+1)/(tail_comp)), (b*(i+1)/(tail_comp)));
-//            }
-//            strip.show();
-//            //pixelNum++;
-//            tail_curr--;
-//        }
-//        delay(wait); // milliseconds
-//      }
-//    }
 
 void blinkCount() {     // called based on timer, currently every 0.1ms
     counter++;		// increase
