@@ -8,7 +8,6 @@
  # Date: Aug 4 2017
  # Description: Control the Blossom sculpture for LED outputs and motor drivers
  # Gets tweet & instagram counts from particle subscription and responds accordingly
- # 08/08 - Added code for ledChase tail >> this connects and reads gotCount, runs thru line 82 - add printLn after whiles?
 */
 
 
