@@ -18,7 +18,7 @@ void gotCount(const char *name, const char *data);
 void ledChaseTail (unsigned char r, unsigned char g, unsigned char b, unsigned int wait, int tail);
 void blinkCount(void);
 
-#define PIXEL_COUNT 15
+#define PIXEL_COUNT 32
 #define PIXEL_PIN A5
 #define MOTOR_DIR A4
 #define MOTOR_EN A3
