@@ -18,7 +18,7 @@ void gotCount(const char *name, const char *data);
 void ledChaseTail (unsigned char r, unsigned char g, unsigned char b, unsigned int wait, int tail);
 void blinkCount(void);
 
-#define PIXEL_COUNT 32
+#define PIXEL_COUNT 15 // !!!!!!!!!!!!!!!! BE SURE TO UPDATE THIS !!!!!!!!!!!!!!!!
 #define PIXEL_PIN A5
 #define MOTOR_DIR A4
 #define MOTOR_EN A3
@@ -49,11 +49,11 @@ void setup() {
     // Close petals during initialization to be sure they are all at zero
     digitalWrite(MOTOR_DIR, LOW);  // Set motor DIR to close
     digitalWrite(MOTOR_EN, HIGH); //Set motor EN to on
-    for(int i=0;i<16;i++) {
-        Serial.println("closing the petals, " + String(16-i) + " sec remaining");
-        delay(1000);
-        //set motor pin to 1
-    }
+    // for(int i=0;i<16;i++) { // comment out during LED testing ~~~~ ADD THIS BACK IN !!!!!!!!! ~~~~~~~~~
+    //     Serial.println("closing the petals, " + String(16-i) + " sec remaining");
+    //     delay(1000);
+    //     //molding motor pin HIGH
+    // }
     digitalWrite(MOTOR_EN, LOW); //Set motor EN to off
     Serial.println("Finishing main loop");
 }
@@ -62,17 +62,11 @@ void loop() {
     int open_ct = 0; // for counting of openings
     int water = 0;
     int change = 0;
-    int r, g, b;
+    int r = 0, g = 160, b = 0;
     Serial.println("Starting loop - will led breath and then chase");
 
     //OPTIONAL publish events to trigger webhook (if we want to check server w a specific freq)
     //Particle.publish("getFeedBlossomCount");
-
-    // and wait at least 60 seconds before doing it again
-    // for(int i=0;i<4;i++) {
-    //     Serial.println("waiting " + String(20-i*5) + " seconds to repeat loop");
-    //     delay(5000);
-    // }
 
     strip.setPixelColor(0, 50,50,50);
     strip.show();
@@ -144,7 +138,7 @@ void loop() {
         }
       // ~~~~~~~~~~~~~~~~~~~~ End closing sequence ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-
+      Serial.println("Watering or closing complete, restarting loop");
 }
 
 // This function will get called when weather data comes in
@@ -218,50 +212,76 @@ uint32_t Wheel(byte WheelPos) {
   }
 }
 
-//strip.setPixelColor(pixel, r, g, b);
+//Ref call: strip.setPixelColor(pixel, r, g, b);
+// Jono attempts to rewrite this function
 void ledChaseTail (unsigned char r, unsigned char g, unsigned char b, unsigned int wait, int tail){
+      Serial.println("Starting LEDChaseTail!");
      int pixelNum = 0;
      int tail_curr = 0;
      int tail_comp = tail + 1;
      __disable_irq();    // Disable Interrupts
-     for (int c = 0; c < (PIXEL_COUNT+tail); c++){
-       if (pixelNum < PIXEL_COUNT+1){
-           for (int i = 0; i < (pixelNum-tail_curr); i++){
-                strip.setPixelColor(pixelNum, r, g, b);
-               //sendPixel(0,0,0);
-           }
-           for (int i = 0; i < tail_curr; i++){
-               strip.setPixelColor(pixelNum, (r*(i+1)/(tail_comp)), (g*(i+1)/(tail_comp)), (b*(i+1)/(tail_comp)));
-               //sendPixel((r*(i+1)/(tail_comp)), (g*(i+1)/(tail_comp)), (b*(i+1)/(tail_comp)));
-           }
-           strip.setPixelColor(pixelNum, r, g, b);
-           //sendPixel(r,g,b);
-           for (int i = pixelNum; i < PIXEL_COUNT; i++){
-               strip.setPixelColor(pixelNum, 0, 0, 0);
-               //sendPixel(0,0,0);
-           }
-           strip.show();
-           pixelNum++;
-           if (tail_curr < tail){
-               tail_curr++;
-           }
-       }
-       else {
-           for (int i = 0; i < (pixelNum-tail_curr); i++){
-               strip.setPixelColor(pixelNum, 0, 0, 0);
-              //  sendPixel(0,0,0);
-           }
-           for (int i = 0; i < tail_curr; i++){
-               strip.setPixelColor(pixelNum, (r*(i+1)/(tail_comp)), (g*(i+1)/(tail_comp)), (b*(i+1)/(tail_comp)));
-              //  sendPixel((r*(i+1)/(tail_comp)), (g*(i+1)/(tail_comp)), (b*(i+1)/(tail_comp)));
-           }
-           strip.show();
-           //pixelNum++;
-           tail_curr--;
-       }
-       delay(wait); // milliseconds
+     for (int j = 0; j < PIXEL_COUNT; j++) // walks thru the whole string
+     {
+        // First, update the color on the next pixel
+        strip.setPixelColor(j, r, g, b);
+        // Then update the tail section to remove the Color
+        if((j-tail)>0){
+          strip.setPixelColor((j-tail), 0, 0, 0);
+        }
+        delay(wait); // milliseconds
+     }
+     for (int j = (PIXEL_COUNT-tail); j < PIXEL_COUNT; j++) // remove the ending tail colors
+     {
+         strip.setPixelColor((j-tail), 0, 0, 0);
+         delay(wait); // milliseconds
      }
    }
+
+
+// Original function from Phil
+// void ledChaseTail (unsigned char r, unsigned char g, unsigned char b, unsigned int wait, int tail){
+//      int pixelNum = 0;
+//      int tail_curr = 0;
+//      int tail_comp = tail + 1;
+//      __disable_irq();    // Disable Interrupts
+//      for (int c = 0; c < (PIXEL_COUNT+tail); c++){
+//        if (pixelNum < PIXEL_COUNT+1){
+//            for (int i = 0; i < (pixelNum-tail_curr); i++){
+//                 strip.setPixelColor(pixelNum, r, g, b);
+//                //sendPixel(0,0,0);
+//            }
+//            for (int i = 0; i < tail_curr; i++){
+//                strip.setPixelColor(pixelNum, (r*(i+1)/(tail_comp)), (g*(i+1)/(tail_comp)), (b*(i+1)/(tail_comp)));
+//                //sendPixel((r*(i+1)/(tail_comp)), (g*(i+1)/(tail_comp)), (b*(i+1)/(tail_comp)));
+//            }
+//            strip.setPixelColor(pixelNum, r, g, b);
+//            //sendPixel(r,g,b);
+//            for (int i = pixelNum; i < PIXEL_COUNT; i++){
+//                strip.setPixelColor(pixelNum, 0, 0, 0);
+//                //sendPixel(0,0,0);
+//            }
+//            strip.show();
+//            pixelNum++;
+//            if (tail_curr < tail){
+//                tail_curr++;
+//            }
+//        }
+//        else {
+//            for (int i = 0; i < (pixelNum-tail_curr); i++){
+//                strip.setPixelColor(pixelNum, 0, 0, 0);
+//               //  sendPixel(0,0,0);
+//            }
+//            for (int i = 0; i < tail_curr; i++){
+//                strip.setPixelColor(pixelNum, (r*(i+1)/(tail_comp)), (g*(i+1)/(tail_comp)), (b*(i+1)/(tail_comp)));
+//               //  sendPixel((r*(i+1)/(tail_comp)), (g*(i+1)/(tail_comp)), (b*(i+1)/(tail_comp)));
+//            }
+//            strip.show();
+//            //pixelNum++;
+//            tail_curr--;
+//        }
+//        delay(wait); // milliseconds
+//      }
+//    }
 
 void blinkCount() {     // called based on timer, currently every 0.1ms
     counter++;		// increase
